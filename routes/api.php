@@ -6,6 +6,7 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PublicationController;
+use App\Http\Controllers\PerfilController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -39,5 +40,13 @@ Route::delete('/publications/{id}', [PublicationController::class, 'delete']);
 Route::post('/publications', [PublicationController::class, 'create']);
 Route::put('/publications', [PublicationController::class, 'update']);
 Route::get('/publications/user/{user_id}', [PublicationController::class, 'GetByUser']);
+
+Route::get('/perfils', [PerfilController::class, 'index']);
+Route::get('/perfils/{id}', [PerfilController::class, 'show']);
+Route::delete('/perfils/{id}', [PerfilController::class, 'delete']);
+Route::post('/perfils', [PerfilController::class, 'create']);
+Route::put('/perfils', [PerfilController::class, 'update']);
+Route::get('/perfils/user/{user_id}', [PerfilController::class, 'GetByUser']);
+
 
 

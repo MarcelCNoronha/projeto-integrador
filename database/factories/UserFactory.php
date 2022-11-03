@@ -26,7 +26,6 @@ class UserFactory extends Factory
             'age' => fake() -> randomNumber(2),
             'phone' => fake() ->regexify('55 [1-9]{2} 9[0-9]{4}-[0-9]{4}'),
             'active' => 1
-
         ];
     }
 
