@@ -28,8 +28,9 @@ class User extends Authenticatable
 
     protected $with = [
         'experiences',
-        // 'publications',
-        'services'
+        'publications',
+        'services',
+        'perfils'
     ];
 
     /**
@@ -64,5 +65,10 @@ class User extends Authenticatable
     public function services()
     {
         return $this->belongsToMany(Service::class)->using(ServiceUser::class);
+    }
+
+    public function perfils()
+    {
+        return $this->hasMany(Perfil::class);
     }
 }

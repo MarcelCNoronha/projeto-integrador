@@ -9,7 +9,6 @@ class Perfil extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'id',
         'image',
         'title',
         'description',
@@ -17,4 +16,8 @@ class Perfil extends Model
         'user_id'
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
