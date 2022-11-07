@@ -22,7 +22,7 @@ trait CrudTrait
         return $this->model::find($id);
     }
 
-    public function delete($id)
+    public function destroy($id)
     {
         $response = $this->model::find($id);
         $response->delete();
