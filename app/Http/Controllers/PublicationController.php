@@ -8,9 +8,13 @@ use Illuminate\Support\Facades\Validator;
 
 class PublicationController extends Controller
 {
-    public function index()
+    use Traits\CrudTrait;
+
+    public $model;
+
+    public function __construct(Publication $publication)
     {
-        return Publication::all();
+        $this->model = $publication;
     }
 
     public function GetByUser($user_id)
@@ -18,35 +22,6 @@ class PublicationController extends Controller
        return Publication::where ('user_id', $user_id)
                             ->OrderBy('name', 'asc')
                             ->get();
-    }
-
-    public function show($id)
-    {
-        return Publication::find($id);
-    }
-
-    public function delete($id)
-    {
-        $publication = Publication::find($id);
-        $publication->delete();
-        return 'ok';
-    }
-
-    public function create(Request $request)
-    {
-        $data       = $request->all();
-        self::validation($data)->validated();
-        $publication    = Publication::create($data);
-        return $publication;
-    }
-
-    public function update(Request $request)
-    {
-        $id             = $request->id;
-        $data           = $request->all();
-        $publication    = Publication::find($id);
-        $publication    = $publication->update($data);
-        return $publication;
     }
 
     private function validation(Array $data)

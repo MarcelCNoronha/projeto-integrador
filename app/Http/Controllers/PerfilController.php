@@ -8,48 +8,23 @@ use Illuminate\Support\Facades\Validator;
 
 class PerfilController extends Controller
 {
-    public function index()
+    use Traits\CrudTrait;
+
+    public $model;
+
+    public function __construct(Perfil $perfil)
     {
-        return Perfil::all();
+        $this->model = $perfil;
     }
 
     public function GetByUser($user_id)
     {
        return Perfil::where ('user_id', $user_id)
-                            ->OrderBy('name', 'asc')
+                            ->OrderBy('title', 'asc')
                             ->get();
     }
 
-    public function show($id)
-    {
-        return Perfil::find($id);
-    }
-
-    public function delete($id)
-    {
-        $perfil = Perfil::find($id);
-        $perfil->delete();
-        return 'ok';
-    }
-
-    public function create(Request $request)
-    {
-        $data       = $request->all();
-        self::validation($data)->validated();
-        $perfil    = Perfil::create($data);
-        return $perfil;
-    }
-
-    public function update(Request $request)
-    {
-        $id             = $request->id;
-        $data           = $request->all();
-        $perfil    = Perfil::find($id);
-        $perfil    = $perfil->update($data);
-        return $perfil;
-    }
-
-    private function validation(Array $data)
+    public function validation(Array $data)
     {
         return Validator::make($data, [
             'image'          => 'required',
@@ -59,11 +34,11 @@ class PerfilController extends Controller
             'user_id'        => 'required'
 
         ], messages:[
-            'image.required'         => 'O campo image é obrigatório',
-            'title.required'        => 'O campo title é obrigatório',
-            'description.required'     => 'O campo description é obrigatório',
-            'active.required'          => 'O campo active é obrigatório',
-            'user_id.required'        => 'O campo user_id é obrigatório',
+            'image.required'            => 'O campo image é obrigatório',
+            'title.required'            => 'O campo title é obrigatório',
+            'description.required'      => 'O campo description é obrigatório',
+            'active.required'           => 'O campo active é obrigatório',
+            'user_id.required'          => 'O campo user_id é obrigatório',
         ]);
     }
 }

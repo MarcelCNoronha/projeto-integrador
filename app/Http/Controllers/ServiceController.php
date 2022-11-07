@@ -8,10 +8,15 @@ use Illuminate\Support\Facades\Validator;
 
 class ServiceController extends Controller
 {
-    public function index()
+    use Traits\CrudTrait;
+
+    public $model;
+
+    public function __construct(Service $service)
     {
-        return Service::all();
+        $this->model = $service;
     }
+
     public function searchNameLast($name)
     {
         return Service::where('name', $name)
@@ -22,35 +27,6 @@ class ServiceController extends Controller
     public function searchName($name)
     {
         return Service::where('name', $name)->first();
-    }
-
-    public function show($id)
-    {
-        return Service::find($id);
-    }
-
-    public function delete($id)
-    {
-        $service = Service::find($id);
-        $service->delete();
-        return 'ok';
-    }
-
-    public function create(Request $request)
-    {
-        $data       = $request->all();
-        self::validation($data)->validated();
-        $service    = Service::create($data);
-        return $service;
-    }
-
-    public function update(Request $request)
-    {
-        $id         = $request->id;
-        $data       = $request->all();
-        $service    = Service::find($id);
-        $service    = $service->update($data);
-        return $service;
     }
 
     private function validation(Array $data)
