@@ -21,6 +21,7 @@ Route::get('/experiences/user/{user_id}', [ExperienceController::class, 'GetByUs
 
 Route::resources(['users' => UserController::class]);
 Route::get('/users/search/name/{name}', [UserController::class, 'searchName']);
+Route::post('/authentication', [usercontroller::class, 'authenticate']);
 
 Route::resources(['publications' => PublicationController::class]);
 Route::get('/publications/user/{user_id}', [PublicationController::class, 'GetByUser']);
