@@ -16,6 +16,14 @@ class UserController extends Controller
     public function __construct(User $user)
     {
         $this->model = $user;
+        $this->middleware('auth')->only([
+            'index',
+            'show',
+            'store',
+            'delete',
+            "upgrade",
+            'searchName'
+        ]);
     }
 
     public function searchName($name)

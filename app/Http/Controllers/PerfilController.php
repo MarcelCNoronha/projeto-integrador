@@ -15,7 +15,14 @@ class PerfilController extends Controller
     public function __construct(Perfil $perfil)
     {
         $this->model = $perfil;
-        $this->middleware('auth')->only(['index']);
+        $this->middleware('auth')->only([
+            'index',
+            'show',
+            'store',
+            'delete',
+            "upgrade",
+            'GetByUser'
+        ]);
     }
 
     public function GetByUser($user_id)
@@ -25,7 +32,7 @@ class PerfilController extends Controller
                             ->get();
     }
 
-    public function validation(Array $data)
+    private function validation(Array $data)
     {
         return Validator::make($data, [
             'image'          => 'required',

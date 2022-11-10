@@ -15,6 +15,14 @@ class PublicationController extends Controller
     public function __construct(Publication $publication)
     {
         $this->model = $publication;
+        $this->middleware('auth')->only([
+            'index',
+            'show',
+            'store',
+            'delete',
+            "upgrade",
+            'GetByUser'
+        ]);
     }
 
     public function GetByUser($user_id)

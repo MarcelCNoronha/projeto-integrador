@@ -15,6 +15,14 @@ class ExperienceController extends Controller
     public function __construct(Experience $experience)
     {
         $this->model = $experience;
+        $this->middleware('auth')->only([
+            'index',
+            'show',
+            'store',
+            'delete',
+            "upgrade",
+            'GetByUser'
+        ]);
     }
 
     public function GetByUser($user_id)
