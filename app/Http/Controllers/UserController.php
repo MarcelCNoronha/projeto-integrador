@@ -42,7 +42,7 @@ class UserController extends Controller
 
         if(Auth::attempt($credentials))
         {
-            // $request ->session()->regenerate();
+            $request ->session()->regenerate();
             $user = Auth::user();
 
             return [
@@ -54,6 +54,24 @@ class UserController extends Controller
         return [
             "success" => false,
             "message" => "Senha incorreto"
+        ];
+    }
+
+    public function userAuthenticate()
+    {
+        $user = Auth::user();
+
+        if(empty($user))
+        {
+            return [
+                "success" => false,
+                "message" => "Usuario não autenticado"
+            ];
+        }
+
+        return [
+            "success" => true,
+            "data" => $user,
         ];
     }
 

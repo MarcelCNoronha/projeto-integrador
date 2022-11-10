@@ -15,6 +15,7 @@ class PerfilController extends Controller
     public function __construct(Perfil $perfil)
     {
         $this->model = $perfil;
+        $this->middleware('auth')->only(['index']);
     }
 
     public function GetByUser($user_id)
