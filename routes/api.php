@@ -7,6 +7,7 @@ use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\PerfilController;
+use App\Http\Controllers\ServiceUserController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -29,6 +30,10 @@ Route::get('/publications/user/{user_id}', [PublicationController::class, 'GetBy
 
 Route::resources(['perfils' => PerfilController::class]);
 Route::get('/perfils/user/{user_id}', [PerfilController::class, 'GetByUser']);
+
+Route::post('/service/user', [ServiceUserController::class, 'storeArray']);
+
+
 
 
 
