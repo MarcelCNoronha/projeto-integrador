@@ -2,23 +2,40 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ServiceUser;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 
 class ServiceUserController extends Controller
 {
+
+    public function __construct(ServiceUser $serviceUser)
+    {
+        $this->middleware('auth')->only([
+            'storyArray'
+        ]);
+    }
     public function storeArray(Request $request)
     {
-        $user = User::find($request['user_id']);
         $data = $request->all();
         self::validation($data)->validate();
+        $user = User::find($request['user_id']);
+        self::deleteAllByUser($user);
         $user->services()->attach($request['services']);
-        return $user;
+        return User::find ($user->id);
     }
 
+    private static function deleteAllByUser(User $user)
+    {
+        $serviceUser = ServiceUser::where('user_id', $user->id)->get();
+        foreach ($serviceUser as $obj){
+            $obj->delete();
+        }
+        return;
+    }
 
-    private function validation(Array $data)
+    private static function validation(Array $data)
     {
     return Validator::make($data, [
         'user_id'          => 'required',
@@ -30,6 +47,4 @@ class ServiceUserController extends Controller
         'services.array'           => 'O campo :services deve ser um array'
     ]);
     }
-
 }
-
