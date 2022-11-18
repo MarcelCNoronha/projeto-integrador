@@ -18,5 +18,17 @@ Route::get('/', function () {
 });
 
 Route::get('/login', function () {
-    return view('login');
+    return view('auth.login');
+});
+
+Route::get('/user/reset', function () {
+    return view('auth.reset-password');
+});
+
+Route::get('/user/create', function () {
+    return view('auth.create-user');
+});
+
+Route::get('/user/forgot', function () {
+    return view('auth.forgot-password');
 });
