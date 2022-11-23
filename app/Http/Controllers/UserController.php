@@ -102,5 +102,16 @@ class UserController extends Controller
             'active.required'       => 'O campo active é obrigatório'
         ]);
     }
+    public function isUser(String $email)
+    {
+        $user = User::where('email', $email)->first();
+        if(empty($user)){
+            return [
+                'sucess'=> false
+            ];
+        }
+        return [
+            'sucess'=> true
+        ];
+    }
 }
-

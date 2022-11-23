@@ -10,11 +10,28 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
-                'resources/css/app.scss',
+                'resources/css/app.css',
                 'resources/js/app.js',
+                'resources/js/pages/login.js',
+                'resources/js/pages/createUser.js',
+                'resources/js/pages/forgotPassword.js',
+                'resources/js/pages/resetPassword.js'
             ],
             refresh: true,
         }),
-        vue()
+        vue({
+            template: {
+                transformAssetUrls: {
+                    base: null,
+                    includeAbsolute: false,
+                },
+            },
+        }),
+
     ],
+    resolve: {
+        alias: {
+           'vue':'vue/dist/vue.esm-bundler.js'
+        },
+    },
 });

@@ -2,5 +2,10 @@
 
 @section('content')
 
-<CreateUserComponent></CreateUserComponent>
+<div class="container">
+    <createUser/>
+</div>
+
+@vite('resources/js/pages/createUser.js')
+
 @endsection

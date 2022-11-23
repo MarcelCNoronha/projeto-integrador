@@ -2,6 +2,10 @@
 
 @section('content')
 
-<ForgotPasswordComponent></ForgotPasswordComponent>
+<div class="container">
+    <forgotPassword/>
+</div>
+
+@vite('resources/js/pages/forgotPassword.js')
 
 @endsection
