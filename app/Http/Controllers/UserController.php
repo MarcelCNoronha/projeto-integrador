@@ -19,7 +19,6 @@ class UserController extends Controller
         $this->middleware('auth')->only([
             'index',
             'show',
-            'store',
             'delete',
             "upgrade",
             'searchName'
@@ -34,11 +33,11 @@ class UserController extends Controller
     public function authenticate(Request $request)
     {
         $credentials = [
-            'email'    => $request->data['email'],
-            'password' => $request->data['password']
+            'email'    => $request->email,
+            'password' => $request->password
         ];
 
-        $user = User::where('email', $request->data['email'])->first();
+        $user = User::where('email', $request->email)->first();
 
         if(empty($user))
         {

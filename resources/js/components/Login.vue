@@ -74,12 +74,15 @@
                         class="form-control" id="phone"
                         :class="{'is-invalid': submitted && v$.form.phone.$invalid}"
                         placeholder="Digite seu telefone"
-                        v-model="form.phone">
+                        v-model="form.phone"
+                        v-mask-phone.br
+                        >
                         <div
                             v-if="submitted && v$.form.phone.$invalid"
                             class="text-danger">
                             O campo telefone é obrigatório
                         </div>
+
                 </div>
 
 
@@ -138,7 +141,7 @@
 
 
                     <div class="text-danger">
-                        <span v-if="submitted && !igualPassword()">
+                        <span v-if="submitted && !igualPassword() && !isUser">
                             As senhas não conferem
                         </span>
                     </div>
@@ -168,6 +171,7 @@
     import axios from 'axios';
     import { useVuelidate } from '@vuelidate/core'
     import { required, requiredIf } from '@vuelidate/validators'
+    import Swal from 'sweetalert2';
 
     export default {
 
@@ -230,16 +234,54 @@
                 if(!this.filledEmail)
                     this.getIsUser();
 
-                if(this.isUser)
+                if(this.filledEmail && this.isUser)
                     this.login();
 
-                if(!this.isUser)
+                if(this.filledEmail && !this.isUser)
                     this.store();
             },
             store(){
+                // sweetalert2 npm
+                Swal.fire({
+                    title: "Cadastrando Usuário..",
+                    text: "Aguarde enquanto estamos cadastrando o usuário",
+                    didOpen: () => {
+                        Swal.showLoading()
+                    }
 
+                })
+                axios({
+                    method: 'post',
+                    url: '/api/users',
+                    data: this.form
+                }).then((response) => {
+                    if(response.data){
+                        window.location.href = '/login';
+                        Swal.close();
+
+                    }
+                });
             },
             login(){
+                Swal.fire({
+                    title: "Logando...",
+                    text: "Aguarde enquanto estamos realizando o login",
+                    didOpen: () => {
+                        Swal.showLoading()
+                    }
+
+                })
+                axios({
+                    method: 'post',
+                    url: '/api/authentication',
+                    data: this.form
+                }).then((response) => {
+                    if(response.data){
+                        window.location.href = '/';
+                        Swal.close();
+
+                    }
+                });
 
             },
             getIsUser(){
