@@ -17,11 +17,19 @@
         <form class="col-md-6 text-start">
             <div class="mb-2">
                 <label for="exampleInputPassword1" class="form-label">Crie sua senha</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Digite sua senha">
+                <input type="password"
+                class="form-control"
+                id="exampleInputPassword1"
+                placeholder="Digite sua senha"
+                v-model="form.password">
             </div>
             <div class="mb-2">
                 <label for="exampleInputPassword2" class="form-label">Confirmar senha</label>
-                <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Digite sua senha novamente">
+                <input type="password"
+                class="form-control"
+                id="exampleInputPassword2"
+                placeholder="Repita sua senha"
+                v-model="form.repeatPassword">
             </div>
             <div class="mb-3">
                 <button type="submit" class="btn btn:hover btn-text col-12">Continuar</button>
@@ -33,10 +41,48 @@
 </template>
 
 <script>
+    import axios from 'axios';
+    import { useVuelidate } from '@vuelidate/core'
+    import { required, requiredIf } from '@vuelidate/validators'
+    import Swal from 'sweetalert2';
+
     export default {
-        mounted() {
-            console.log('Component mounted.')
+
+        setup: () => ({ v$: useVuelidate() }),
+
+        data() {
+            return {
+                form:
+                {
+                    password:'',
+                    repeatPassword: ''
+                },
+                submitted: false,
+                error: false,
+                message: ''
+            }
+        },
+        validations() {
+            return {
+                form:{
+                    repeatPassword: {required: requiredIf(function(){
+                        return this.filledEmail && !this.isUser
+                    })},
+
+                    password: {required: requiredIf(function(){
+                        return this.filledEmail
+                    })}
+                }
+            }
+        },
+        methods:{
+
+            igualPassword(){
+                return this.form.password == this.form.repeatPassword;
+            }
+
         }
+
     }
 </script>
 <style>

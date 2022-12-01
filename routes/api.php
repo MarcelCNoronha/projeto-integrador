@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ExperienceController;
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\PerfilController;
@@ -25,6 +26,8 @@ Route::get('/users/search/name/{name}', [UserController::class, 'searchName']);
 Route::get('/authenticate', [UserController::class, 'userAuthenticate']);
 Route::post('/authentication', [usercontroller::class, 'authenticate']);
 Route::get('/user/is-user/{email}', [usercontroller::class, 'isUser']);
+Route::post('/forgot-password', [ForgotPasswordController::class, 'forgotPassword']);
+
 
 Route::resources(['publications' => PublicationController::class]);
 Route::get('/publications/user/{user_id}', [PublicationController::class, 'GetByUser']);

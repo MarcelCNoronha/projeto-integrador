@@ -21,14 +21,10 @@ Route::get('/login', function () {
     return view('auth.login');
 });
 
-Route::get('/user/reset', function () {
+Route::get('/reset-password', function () {
     return view('auth.reset-password');
 });
 
-Route::get('/user/create', function () {
-    return view('auth.create-user');
-});
-
-Route::get('/user/forgot', function () {
+Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
 });

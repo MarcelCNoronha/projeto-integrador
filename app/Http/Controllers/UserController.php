@@ -60,7 +60,7 @@ class UserController extends Controller
 
         return [
             "success" => false,
-            "message" => "Senha incorreto"
+            "message" => "Senha incorreta"
         ];
     }
 

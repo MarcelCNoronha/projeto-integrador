@@ -3,9 +3,9 @@
 @section('content')
 
     <div class="container">
-        <resetPassword/>
+        <reset-password/>
     </div>
-    
-    @vite('resources/js/pages/resetPassword.js')
+
+    @vite('resources/js/pages/reset-password.js')
 
 @endsection

@@ -1,6 +1,11 @@
 <template>
     <div class="container text-center">
         <div class="row">
+                 <div v-if="error"
+                 class="alert alert-danger mt-5
+                 col-4 offset-4" role="alert">
+                    {{message}}
+             </div>
         <div>
             <img src="/image/logo.jpg" alt="logo">
         </div>
@@ -14,7 +19,8 @@
         <form class="col-md-4 text-start">
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Email</label>
-                <input type="email"
+                <input
+                type="email"
                 class="form-control"
                 :class="{'is-invalid': submitted && v$.form.email.$invalid}"
                 id="exampleInputEmail1"
@@ -44,6 +50,9 @@
                     class="text-danger">
                     O campo senha é obrigatório
                 </div>
+                <a href="/forgot-password">
+                    Recuperar senha
+                </a>
             </div>
 
 
@@ -191,7 +200,9 @@
                 },
                 isUser: '',
                 filledEmail: false,
-                submitted: false
+                submitted: false,
+                error: false,
+                message: ''
                 // services:[]
             }
         },
@@ -276,11 +287,12 @@
                     url: '/api/authentication',
                     data: this.form
                 }).then((response) => {
-                    if(response.data){
+                    if(response.data.sucess){
                         window.location.href = '/';
-                        Swal.close();
-
                     }
+                    this.error = true;
+                    this.message = response.data.message;
+                    Swal.close();
                 });
 
             },
