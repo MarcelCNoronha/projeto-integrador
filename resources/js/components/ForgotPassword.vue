@@ -28,9 +28,56 @@
 </template>
 
 <script>
+import axios from 'axios';
+    import { useVuelidate } from '@vuelidate/core';
+    import { required } from '@vuelidate/validators';
+    import Swal from 'sweetalert2';
     export default {
-        mounted() {
-            console.log('Component mounted.')
+        setup: ()   => ({ v$: useVuelidate() }),
+        data() {
+            return {
+                form: {
+                    email: ''
+                },
+                submitted: false,
+                sent: false,
+                not_sent: false
+            }
+        },
+        validations() {
+            return {
+                form: {
+                    email: {required}
+                }
+            }            
+        },
+        methods: {
+            post() {
+                this.submitted = true;
+                this.sent = false;
+                this.not_sent = false;
+                if(this.v$.form.$invalid)
+                    return;
+                Swal.fire({
+                    title: "Enviando...",
+                    text: "Aguarde enquanto estamos enviando o email de redefinição.",
+                    didOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
+                axios({
+                    method: 'post',
+                    url: '/api/forgot-password',
+                    data: this.form
+                }).then((response) => {
+                    if(response.data.success) {
+                        this.sent = true;                          
+                    } else {
+                        this.not_sent = true;
+                    }                    
+                    Swal.close();
+                });
+            }
         }
     }
 </script>

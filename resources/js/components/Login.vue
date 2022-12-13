@@ -25,10 +25,17 @@
             </div>
 
             <div
-                v-if="submitted && v$.form.email.$invalid"
+                v-if="submitted && v$.form.email.required.$invalid"
                 class="text-danger">
                 O campo email é obrigatório
             </div>
+
+            <div
+                v-if="submitted && v$.form.email.email.$invalid"
+                class="text-danger">
+                O campo email deve ser um email válido
+            </div>
+
 
             <div v-if="filledEmail && isUser" class="mb-3">
                 <label for="exampleInputPassword" class="form-label">Senha</label>
@@ -78,9 +85,15 @@
                         v-mask-phone.br
                         >
                         <div
-                            v-if="submitted && v$.form.phone.$invalid"
+                            v-if="submitted && v$.form.phone.required.$invalid"
                             class="text-danger">
                             O campo telefone é obrigatório
+                        </div>
+                        
+                        <div
+                        v-if="submitted && v$.form.phone.minLenght.$invalid"
+                            class="text-danger">
+                            O campo telefone deve ter 11 caracteres
                         </div>
 
                 </div>
@@ -97,9 +110,14 @@
                         placeholder="Digite a sua idade"
                         v-model="form.age">
                         <div
-                            v-if="submitted && v$.form.age.$invalid"
+                            v-if="submitted && v$.form.age.required.$invalid"
                             class="text-danger">
                             O campo idade é obrigatório
+                        </div>
+                        <div
+                            v-if="submitted && v$.form.age.minValue.$invalid"
+                            class="text-danger">
+                            O campo idade tem que ser superior a 1 ano
                         </div>
                 </div>
 
@@ -170,9 +188,9 @@
 <script>
     import axios from 'axios';
     import { useVuelidate } from '@vuelidate/core'
-    import { required, requiredIf } from '@vuelidate/validators'
+    import { required, requiredIf, email, minValue,minLength} from '@vuelidate/validators'
     import Swal from 'sweetalert2';
-
+    
     export default {
 
         setup: () => ({ v$: useVuelidate() }),
@@ -198,7 +216,7 @@
         validations() {
             return {
                 form:{
-                    email: {required},
+                    email: {required, email},
 
                     name: {required: requiredIf(function(){
                         return this.filledEmail && !this.isUser
@@ -206,11 +224,15 @@
 
                     age: {required: requiredIf(function(){
                         return this.filledEmail && !this.isUser
-                    })},
+                    }),
+                    minValue: minValue(1)
+                    },
 
                     phone: {required: requiredIf(function(){
                         return this.filledEmail && !this.isUser
-                    })},
+                    }),
+                    minLenght: minLength(16)                  
+                  },
 
                     repeatPassword: {required: requiredIf(function(){
                         return this.filledEmail && !this.isUser
