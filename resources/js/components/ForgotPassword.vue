@@ -52,6 +52,7 @@
 </template>
 
 <script>
+<<<<<<< HEAD
     import axios from 'axios';
     import { useVuelidate } from '@vuelidate/core'
     import { required } from '@vuelidate/validators'
@@ -67,10 +68,27 @@
                     email: ''
                 },
                 submitted: false
+=======
+import axios from 'axios';
+    import { useVuelidate } from '@vuelidate/core';
+    import { required } from '@vuelidate/validators';
+    import Swal from 'sweetalert2';
+    export default {
+        setup: ()   => ({ v$: useVuelidate() }),
+        data() {
+            return {
+                form: {
+                    email: ''
+                },
+                submitted: false,
+                sent: false,
+                not_sent: false
+>>>>>>> 2065fe6df8f57c5a0bc3b7f3aa6554cf54221e25
             }
         },
         validations() {
             return {
+<<<<<<< HEAD
                 form:{
                     email: {required},
 
@@ -86,6 +104,40 @@
                 if(this.v$.form.$invalid)
                     return;
             },
+=======
+                form: {
+                    email: {required}
+                }
+            }            
+        },
+        methods: {
+            post() {
+                this.submitted = true;
+                this.sent = false;
+                this.not_sent = false;
+                if(this.v$.form.$invalid)
+                    return;
+                Swal.fire({
+                    title: "Enviando...",
+                    text: "Aguarde enquanto estamos enviando o email de redefinição.",
+                    didOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
+                axios({
+                    method: 'post',
+                    url: '/api/forgot-password',
+                    data: this.form
+                }).then((response) => {
+                    if(response.data.success) {
+                        this.sent = true;                          
+                    } else {
+                        this.not_sent = true;
+                    }                    
+                    Swal.close();
+                });
+            }
+>>>>>>> 2065fe6df8f57c5a0bc3b7f3aa6554cf54221e25
         }
     }
 </script>

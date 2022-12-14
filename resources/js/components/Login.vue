@@ -15,8 +15,8 @@
         <div class="mt-0">
             <p>Informe suas credênciais para acessar a plataforma</p>
         </div>
-        <div class="row mt-2 offset-md-4">
-        <form class="col-md-4 text-start">
+        <div class="row mt-2 offset-md-3">
+        <form class="col-md-6 text-start">
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Email</label>
                 <input
@@ -31,10 +31,17 @@
             </div>
 
             <div
-                v-if="submitted && v$.form.email.$invalid"
+                v-if="submitted && v$.form.email.required.$invalid"
                 class="text-danger">
                 O campo email é obrigatório
             </div>
+
+            <div
+                v-if="submitted && v$.form.email.email.$invalid"
+                class="text-danger">
+                O campo email deve ser um email válido
+            </div>
+
 
             <div v-if="filledEmail && isUser" class="mb-3">
                 <label for="exampleInputPassword" class="form-label">Senha</label>
@@ -50,7 +57,8 @@
                     class="text-danger">
                     O campo senha é obrigatório
                 </div>
-                <a href="/forgot-password">
+                <a href="/forgot-password/ + {{this.form.email}}">
+                    <!-- corrigir concatenação -->
                     Recuperar senha
                 </a>
             </div>
@@ -87,14 +95,17 @@
                         v-mask-phone.br
                         >
                         <div
-                            v-if="submitted && v$.form.phone.$invalid"
+                            v-if="submitted && v$.form.phone.required.$invalid"
                             class="text-danger">
                             O campo telefone é obrigatório
                         </div>
 
+                        <div
+                        v-if="submitted && v$.form.phone.minLenght.$invalid"
+                            class="text-danger">
+                            O campo telefone está incompleto
+                        </div>
                 </div>
-
-
 
                 <div class="mb-3">
                     <label for="exampleInputAge" class="form-label">Idade</label>
@@ -106,9 +117,14 @@
                         placeholder="Digite a sua idade"
                         v-model="form.age">
                         <div
-                            v-if="submitted && v$.form.age.$invalid"
+                            v-if="submitted && v$.form.age.required.$invalid"
                             class="text-danger">
                             O campo idade é obrigatório
+                        </div>
+                        <div
+                            v-if="submitted && v$.form.age.minValue.$invalid"
+                            class="text-danger">
+                            O campo idade tem que ser superior a 1 ano
                         </div>
                 </div>
 
@@ -124,9 +140,14 @@
                         placeholder="Digite a sua senha"
                         v-model="form.password">
                         <div
-                            v-if="submitted && v$.form.password.$invalid"
+                            v-if="submitted && v$.form.password.required.$invalid"
                             class="text-danger">
                             O campo senha é obrigatório
+                        </div>
+                        <div
+                            v-if="submitted && v$.form.password.minLenght.$invalid"
+                            class="text-danger">
+                            O campo senha deve ter no minimo 8 digitos
                         </div>
                 </div>
 
@@ -141,19 +162,29 @@
                     placeholder="Repita a sua senha"
                     v-model="form.repeatPassword">
                     <div
-                        v-if="submitted && v$.form.repeatPassword.$invalid"
+                        v-if="submitted && v$.form.repeatPassword.required.$invalid"
                         class="text-danger">
                         O campo senha é obrigatório
+                    </div>
+                    <div
+                        v-if="submitted && v$.form.repeatPassword.minLenght.$invalid"
+                        class="text-danger">
+                        O campo senha deve ter no minimo 8 digitos
+                    </div>
+                    <div
+                        v-if="submitted && v$.form.repeatPassword.sameAsPassword.$invalid"
+                        class="text-danger">
+                        As suas senhas não conferem
                     </div>
                 </div>
             </div>
 
 
-                    <div class="text-danger">
+                    <!-- <div class="text-danger">
                         <span v-if="submitted && !igualPassword() && !isUser">
                             As senhas não conferem
                         </span>
-                    </div>
+                    </div> -->
 
             <div class="mb-3">
                 <button
@@ -179,7 +210,7 @@
 <script>
     import axios from 'axios';
     import { useVuelidate } from '@vuelidate/core'
-    import { required, requiredIf } from '@vuelidate/validators'
+    import { required, requiredIf, email, minValue,minLength, sameAs} from '@vuelidate/validators'
     import Swal from 'sweetalert2';
 
     export default {
@@ -209,7 +240,7 @@
         validations() {
             return {
                 form:{
-                    email: {required},
+                    email: {required, email},
 
                     name: {required: requiredIf(function(){
                         return this.filledEmail && !this.isUser
@@ -217,19 +248,28 @@
 
                     age: {required: requiredIf(function(){
                         return this.filledEmail && !this.isUser
-                    })},
+                    }),
+                    minValue: minValue(1)
+                    },
 
                     phone: {required: requiredIf(function(){
                         return this.filledEmail && !this.isUser
-                    })},
+                    }),
+                    minLenght: minLength(16)
+                    },
 
                     repeatPassword: {required: requiredIf(function(){
                         return this.filledEmail && !this.isUser
-                    })},
+                    }),
+                    minLenght: minLength(8),
+                    sameAsPassword:sameAs(this.form.password)
+                    },
 
                     password: {required: requiredIf(function(){
                         return this.filledEmail
-                    })}
+                    }),
+                    minLenght: minLength(8),
+                }
                 }
             }
         },
@@ -308,9 +348,10 @@
                 })
 
             },
-            igualPassword(){
-                return this.form.password == this.form.repeatPassword;
-            }
+
+            // igualPassword(){
+            //     return this.form.password == this.form.repeatPassword;
+            // }
 
             // reserchService(){
             //     axios({
